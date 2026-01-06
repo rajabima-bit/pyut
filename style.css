@@ -1,0 +1,41 @@
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(#fff0f5, #ffe4e1);
+  font-family: 'Comic Sans MS', cursive;
+  overflow: hidden;
+}
+
+.container {
+  text-align: center;
+  position: relative;
+  z-index: 10;
+  padding: 10px;
+}
+
+h1 {
+  font-size: 24px;
+  line-height: 1.4;
+}
+
+button {
+  padding: 12px 25px;
+  border-radius: 20px;
+  border: none;
+  background: pink;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#score {
+  margin-top: 10px;
+  font-size: 18px;
+  color: #ff69b4;
+}
+
+.emoji {
+  position: absolute;
+  cursor: pointer;
+  user-select: none;
+  touch-action: none;
+}
