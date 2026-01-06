@@ -1,4 +1,3 @@
-alert("JS TERLOAD");
 const startBtn = document.getElementById("startBtn");
 const text = document.getElementById("text");
 const scoreEl = document.getElementById("score");
