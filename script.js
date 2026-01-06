@@ -1,25 +1,27 @@
 const startBtn = document.getElementById("startBtn");
 const text = document.getElementById("text");
 const scoreEl = document.getElementById("score");
-const sound = document.getElementById("sound");
-let score = 0;
-let gameInterval;
 
-const emojis = ["💗","🌸","🫣","🤣","💖","✨"];
+let score = 0;
+let gameRunning = false;
+let spawnInterval;
+
+const emojis = ["💗", "🌸", "🤣", "✨", "💖"];
 
 startBtn.addEventListener("click", startGame);
 
 function startGame() {
-  startBtn.style.display = "none";
-  text.innerText = "Tangkap emoji yang muncul! 😳";
+  if (gameRunning) return;
+
+  gameRunning = true;
   score = 0;
   scoreEl.innerText = "Score: 0";
+  text.innerText = "Tangkap emoji secepat mungkin! 😳";
+  startBtn.style.display = "none";
 
-  // spawn emoji setiap 0.7 detik
-  gameInterval = setInterval(spawnEmoji, 700);
+  spawnInterval = setInterval(spawnEmoji, 700);
 
-  // game selesai setelah 15 detik
-  setTimeout(endGame, 15000);
+  setTimeout(endGame, 15000); // 15 detik
 }
 
 function spawnEmoji() {
@@ -27,87 +29,71 @@ function spawnEmoji() {
   emoji.className = "emoji";
   emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
 
-  // posisi awal acak
-  emoji.style.left = Math.random() * (window.innerWidth - 50) + "px";
-  emoji.style.top = "-50px";
-  emoji.style.fontSize = Math.random() * 30 + 25 + "px";
+  emoji.style.left = Math.random() * (window.innerWidth - 40) + "px";
+  emoji.style.top = "-40px";
 
   document.body.appendChild(emoji);
 
-  // gerak jatuh
-  let topPos = -50;
+  let top = -40;
   const fall = setInterval(() => {
-    topPos += 4;
-    emoji.style.top = topPos + "px";
+    top += 4;
+    emoji.style.top = top + "px";
 
-    if(topPos > window.innerHeight) {
+    if (top > window.innerHeight) {
       clearInterval(fall);
       emoji.remove();
     }
   }, 20);
 
-  // klik/tap emoji
-  emoji.addEventListener("click", emojiClicked);
-  emoji.addEventListener("touchstart", emojiClicked);
-
-  function emojiClicked() {
+  function catchEmoji() {
     score++;
     scoreEl.innerText = "Score: " + score;
-    randomMessage();
-    emoji.remove();
+    text.innerText = randomText();
     clearInterval(fall);
-    if(sound) sound.play();
+    emoji.remove();
   }
+
+  // SUPPORT CLICK & TAP
+  emoji.addEventListener("click", catchEmoji);
+  emoji.addEventListener("touchstart", catchEmoji);
 }
 
-// pesan lucu tiap klik emoji
-function randomMessage() {
-  const messages = [
-    "lelett kali laa😳",
-    "tapii da mantapp",
-    "Lucu ya 😆",
-    "Awas gilakk"
-  ];
-  text.innerText = messages[Math.floor(Math.random() * messages.length)];
-}
-
-// akhir game
 function endGame() {
-  clearInterval(gameInterval);
-  text.innerText = Game selesai! Skormu: ${score} 💖;
-  confetti();
-  finalMessage();
+  clearInterval(spawnInterval);
+  gameRunning = false;
+
+  text.innerText = Game selesai 😆 Skormu: ${score} 💗;
+  showConfetti();
 }
 
-// pesan akhir manis + confetti
-function finalMessage() {
-  const finalMsgs = [
-    "Kau menang Tapi tetep lanjut yaa😳",
-    "kurang2i keluar malam pyutt",
-    "tahun baru harus jadi kepribadian baruu"
+function randomText() {
+  const texts = [
+    "lelet kali mmng 😳",
+    "puger puger😆",
+    "Awas gila😏",
+    "kuat2 ldr nya 💖"
   ];
-  text.innerText = finalMsgs[Math.floor(Math.random() * finalMsgs.length)];
+  return texts[Math.floor(Math.random() * texts.length)];
 }
 
-// confetti emoji hati jatuh
-function confetti() {
-  for(let i=0; i<30; i++){
-    const e = document.createElement("div");
-    e.innerText = ["💗","🌸","✨"][Math.floor(Math.random()*3)];
-    e.style.position = "absolute";
-    e.style.left = Math.random()*100 + "vw";
-    e.style.top = "-50px";
-    e.style.fontSize = Math.random()*30 + 20 + "px";
-    document.body.appendChild(e);
+function showConfetti() {
+  for (let i = 0; i < 25; i++) {
+    const c = document.createElement("div");
+    c.innerText = "💗";
+    c.style.position = "absolute";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.top = "-30px";
+    c.style.fontSize = "24px";
+    document.body.appendChild(c);
 
-    let top = -50;
+    let top = -30;
     const fall = setInterval(() => {
       top += 5;
-      e.style.top = top + "px";
-      if(top > window.innerHeight) {
+      c.style.top = top + "px";
+      if (top > window.innerHeight) {
         clearInterval(fall);
-        e.remove();
+        c.remove();
       }
-    },20);
+    }, 20);
   }
 }
